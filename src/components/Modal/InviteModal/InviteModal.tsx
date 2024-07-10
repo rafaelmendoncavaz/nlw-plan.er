@@ -1,6 +1,6 @@
 import { X } from "lucide-react"
 import { EmailCard } from "./EmailCard/EmailCard"
-import { ModalForm } from "../../Form/ModalForm/ModalForm"
+import { ModalInviteForm } from "../../Form/ModalInviteForm/ModalInviteForm"
 
 interface LocationModalProps {
 
@@ -42,14 +42,14 @@ export function InviteModal({ closeGuestsModal, emailsToInvite, addEmailToInvite
                         emailsToInvite.map((email, index) => {
 
                             return <EmailCard key={index} email={email} removeEmailFromInvite={removeEmailFromInvite} />
-                            
+
                         })
                     }
                 </div>
 
                 <div className="w-full h-px bg-zinc-800" />
 
-                <ModalForm addEmailToInvite={addEmailToInvite} />
+                <ModalInviteForm addEmailToInvite={addEmailToInvite} />
 
             </div>
         </div>
