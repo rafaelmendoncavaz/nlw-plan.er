@@ -1,6 +1,6 @@
-import { Plus } from "lucide-react";
-import { Button } from "../../../Global/Button";
-import { LinksCard } from "./LinksCard/LinksCard";
+import { Plus } from "lucide-react"
+import { Button } from "../../../Global/Button"
+import { LinksCard } from "./LinksCard/LinksCard"
 
 export function Links() {
 

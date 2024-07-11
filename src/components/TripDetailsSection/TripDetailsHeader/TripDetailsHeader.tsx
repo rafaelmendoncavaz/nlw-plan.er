@@ -1,7 +1,34 @@
-import { MapPin, Calendar, Settings2 } from "lucide-react";
-import { Button } from "../../Global/Button";
+import { MapPin, Calendar, Settings2 } from "lucide-react"
+import { Button } from "../../Global/Button"
+import { useParams } from "react-router-dom"
+import { api } from "../../../lib/axios"
+import { useEffect, useState } from "react"
+import { format } from "date-fns"
+
+interface TripDetails {
+
+    id: string,
+    destination: string,
+    starts_at: string,
+    ends_at: string,
+    is_confirmed: boolean
+
+}
 
 export function TripDetailsHeader() {
+
+    const { tripId } = useParams()
+    const [trip, setTrip] = useState<TripDetails | undefined>()
+
+    useEffect(() => {
+        api.get(`/trips/${tripId}`)
+    .then(response => setTrip(response.data.trip))
+
+    }, [tripId])
+
+    const displayedDate = trip
+    ? `${format(trip.starts_at, "d' de 'LLL")} até ${format(trip.ends_at, "d' de 'LLL")}`
+    : null
 
     return(
         <div className="px-4 h-16 rounded-xl bg-zinc-900 shadow-shape flex items-center justify-between">
@@ -9,7 +36,7 @@ export function TripDetailsHeader() {
             <div className="flex items-center gap-2">
                 <MapPin className="size-5 text-zinc-400" />
                 <span className="text-lg text-zinc-100">
-                    Florianópolis, Brasil
+                    {trip?.destination}
                 </span>
             </div>
 
@@ -18,7 +45,7 @@ export function TripDetailsHeader() {
                 <div className="flex items-center gap-2">
                     <Calendar className="size-5 text-zinc-400" />
                     <span className="text-lg text-zinc-100">
-                        17 a 23 de Agosto
+                        {displayedDate}
                     </span>
                 </div>
 

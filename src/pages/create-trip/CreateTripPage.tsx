@@ -1,9 +1,11 @@
 import { FormEvent, useState } from "react"
 import { LocationDateInput } from "../../components/InputSection/LocationDateInput/LocationDateInput"
 import { InvitesInput } from "../../components/InputSection/InvitesInput/InvitesInput"
-import { InviteModal } from "../../components/Modal/InviteModal/InviteModal"
+import { InviteModal } from "../../components/Modal/EmailList/InviteModal"
 import { ConfirmationModal } from "../../components/Modal/ConfirmationModal/ConfirmationModal"
 import { useNavigate } from "react-router-dom"
+import { DateRange } from "react-day-picker"
+import { api } from "../../lib/axios"
 
 export function CreateTripPage() {
 
@@ -13,6 +15,10 @@ export function CreateTripPage() {
     const [isGuestsModalOpen, setIsGuestsModalOpen] = useState<boolean>(false)
     const [isConfirmTripModalOpen, setIsConfirmTripModalOpen] = useState<boolean>(false)
     const [emailsToInvite, setEmailsToInvite] = useState<string[]>([])
+    const [destination, setDestination] = useState<string>("")
+    const [tripCreator,  setTripCreator] = useState<string>("")
+    const [creatorEmail,  setcreatorEmail] = useState<string>("")
+    const [tripStartEndDate, setTripStartEndDate] = useState<DateRange | undefined>()
 
     const openInvitesInput: () => void = () => {
 
@@ -32,22 +38,17 @@ export function CreateTripPage() {
 
     }
 
-    const closeGuestsModal: () => void = () => {
-
-    setIsGuestsModalOpen(false)
-
-    }
-
     const openConfirmTripModal: () => void = () => {
 
     setIsConfirmTripModalOpen(true)
 
     }
 
-    const closeConfirmTripModal: () => void = () => {
+    const closeModal: () => void = () => {
 
-    setIsConfirmTripModalOpen(false)
-
+        setIsGuestsModalOpen(false)
+        setIsConfirmTripModalOpen(false)
+    
     }
 
     const addNewEmailToInvite = (event: FormEvent<HTMLFormElement>) => {
@@ -80,11 +81,42 @@ export function CreateTripPage() {
 
     }
 
-    const createTrip = (event: FormEvent<HTMLFormElement>) => {
+    async function createTrip (event: FormEvent<HTMLFormElement>) {
 
         event.preventDefault()
 
-        navigate("/trips/123")
+        if (!destination) {
+            alert("Preencha o destino!")
+            return
+        }
+    
+        if (!tripStartEndDate?.from || !tripStartEndDate?.to) {
+            alert("Preencha a data!")
+            return
+        }
+    
+        if (emailsToInvite.length === 0) {
+            alert("Convide ao menos uma pessoa!")
+            return
+        }
+    
+        if (!tripCreator || !creatorEmail) {
+            alert("Preencha os seus dados!")
+            return
+        }
+    
+        const response = await api.post("/trips", {
+            destination,
+            starts_at: tripStartEndDate.from,
+            ends_at: tripStartEndDate.to,
+            emails_to_invite: emailsToInvite,
+            owner_name: tripCreator,
+            owner_email: creatorEmail
+        })
+    
+        const { tripId } = response.data
+
+        navigate(`/trips/${tripId}`)
 
     }
 
@@ -108,6 +140,9 @@ export function CreateTripPage() {
             openInvitesInput={openInvitesInput} 
             isGuestsInputOpen={isGuestsInputOpen} 
             closeInvitesInput={closeInvitesInput} 
+            setDestination={setDestination}
+            setTripStartEndDate={setTripStartEndDate}
+            tripStartEndDate={tripStartEndDate}
             />
             {
             isGuestsInputOpen && 
@@ -130,7 +165,7 @@ export function CreateTripPage() {
         {
         isGuestsModalOpen && 
         <InviteModal 
-        closeGuestsModal={closeGuestsModal} 
+        closeModal={closeModal} 
         emailsToInvite={emailsToInvite} 
         addEmailToInvite={addNewEmailToInvite} 
         removeEmailFromInvite={removeEmailFromInvite} 
@@ -140,8 +175,10 @@ export function CreateTripPage() {
         {
         isConfirmTripModalOpen &&
         <ConfirmationModal 
-        closeConfirmTripModal={closeConfirmTripModal}
+        closeModal={closeModal}
         createTrip={createTrip}
+        setTripCreator={setTripCreator}
+        setCreatorEmail={setcreatorEmail}
         />
         }
 

@@ -1,62 +1,44 @@
-import { X, Tag, Calendar } from "lucide-react"
-import { Button } from "../../../Global/Button"
-import { Input } from "../../../Global/Input"
+import { useParams } from "react-router-dom"
+import { api } from "../../../../lib/axios"
+import { ActivitiesForm } from "../../../Form/ActivitiesForm/ActivitiesForm"
+import { Modal } from "../../../Global/Modal"
 
 interface ActivityModalProps {
 
-    closeCreateActivityModal: () => void
+    closeModal: () => void,
+    
 
 }
 
-export function ActivitiesModal({ closeCreateActivityModal }: ActivityModalProps) {
+export function ActivitiesModal({ closeModal }: ActivityModalProps) {
+
+    const { tripId } = useParams()
+
+    async function createActivity (event: React.FormEvent<HTMLFormElement>) {
+
+        event.preventDefault()
+
+        const data = new FormData(event.currentTarget)
+
+        const activity = data.get("activity")?.toString()
+        const when = data.get("dateandtime")?.toString()
+
+        await api.post(`/trips/${tripId}/activities`, {
+            title: activity,
+            occurs_at: when
+        })
+
+        window.document.location.reload()
+
+    }
 
     return(
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
-                    <div className="w-[640px] rounded-xl py-5 px-6 shadow-shape bg-zinc-900 space-y-5">
-        
-                        <div className="space-y-2">
-        
-                            <div className="flex items-center justify-between">
-        
-                                <h2 className="text-lg font-semibold">
-                                    Cadastrar Atividade
-                                </h2>
-
-                                <button onClick={closeCreateActivityModal}>
-                                    <X className="size-5 text-zinc-400" />
-                                </button>
-        
-                            </div>
-        
-                            <p className="text-sm text-zinc-400">
-                               Todos os convidados podem visualizar as atividades.
-                            </p>
-        
-                        </div>
-        
-                        <form className="space-y-3">
-
-                            <div className="h-14 px-4 bg-zinc-950 border-zinc-800 rounded-lg flex items-center gap-2">
-                                <Tag className="text-zinc-400 size-5" />
-                                <Input type="text" name="activity" placeholder="Qual a atividade?" />
-                            </div>
-
-                            <div className="flex items-center gap-2">
-
-                                <div className="flex-1 h-14 px-4 bg-zinc-950 border-zinc-800 rounded-lg flex items-center gap-2">
-                                    <Calendar className="text-zinc-400 size-5" />
-                                    <Input placeholder="Data e horário da atividade" type="datetime-local" name="dateandtime" />
-                                </div>
-
-                            </div>
-                                
-                            <Button type="submit" sizeVariant="full">
-                                Salvar Atividade
-                            </Button>
-                            
-                        </form>
-        
-                    </div>
-                </div>
+       <Modal
+       closeModal={closeModal}
+       title="Cadastrar Atividade" 
+       description="Todos os convidados podem visualizar as atividades."
+       form={<ActivitiesForm createActivity={createActivity} />}
+       size="large"
+       />
     )
 }

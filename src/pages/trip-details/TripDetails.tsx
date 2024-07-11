@@ -14,7 +14,7 @@ export function TripDetails() {
 
     }
 
-    const closeCreateActivityModal: () => void = () => {
+    const closeModal: () => void = () => {
 
         setIsCreateActivityModalOpen(false)
 
@@ -34,7 +34,7 @@ export function TripDetails() {
             </main>
 
             {
-            isCreateActivityModalOpen && <ActivitiesModal closeCreateActivityModal={closeCreateActivityModal} />
+            isCreateActivityModalOpen && <ActivitiesModal closeModal={closeModal} />
             }
 
         </div>

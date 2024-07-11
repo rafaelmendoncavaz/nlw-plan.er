@@ -1,18 +1,21 @@
 import { Calendar } from "lucide-react"
-import { Input } from "../../../Global/Input"
 
 interface CalendarProp {
 
-    isGuestsInputOpen: boolean
+    isGuestsInputOpen: boolean,
+    openDatePicker: () => void,
+    displayedDate: string | null
 
 }
 
-export function DateInput({ isGuestsInputOpen }: CalendarProp) {
+export function DateInput({ isGuestsInputOpen, openDatePicker, displayedDate }: CalendarProp) {
 
     return(
-        <div className="flex items-center gap-2 ">
+        <button onClick={openDatePicker} disabled={isGuestsInputOpen} className="flex items-center gap-2 text-left">
             <Calendar className="size-5 text-zinc-400" />
-            <Input type="date" name="when" placeholder="Quando?" disabled={isGuestsInputOpen} sizeVariant="small" />
-        </div>
+            <span className="text-lg text-zinc-400 flex-1">
+                { displayedDate || "Quando?" }
+            </span>
+        </button>
     )
 }
