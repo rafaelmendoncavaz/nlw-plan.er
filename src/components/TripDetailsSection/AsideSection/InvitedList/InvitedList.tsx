@@ -14,7 +14,13 @@ interface Guests {
 
 }
 
-export function InvitedList() {
+interface InvitedListProps {
+
+    openManageGuestsModal: () => void
+
+}
+
+export function InvitedList({ openManageGuestsModal }: InvitedListProps) {
 
     const { tripId } = useParams()
     const [guests, setGuests] = useState<Guests[]>([])
@@ -41,7 +47,7 @@ export function InvitedList() {
 
             </div>
 
-            <Button colorVariant="secondary" sizeVariant="full">
+            <Button onClick={openManageGuestsModal} colorVariant="secondary" sizeVariant="full">
                 <UserCog className="size-5" />
                 Gerenciar Convidados
             </Button>

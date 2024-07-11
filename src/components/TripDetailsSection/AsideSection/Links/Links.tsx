@@ -1,8 +1,34 @@
 import { Plus } from "lucide-react"
 import { Button } from "../../../Global/Button"
 import { LinksCard } from "./LinksCard/LinksCard"
+import { useState, useEffect } from "react"
+import { useParams } from "react-router-dom"
+import { api } from "../../../../lib/axios"
 
-export function Links() {
+interface Links {
+
+    id: string,
+    title: string,
+    url: string
+
+}
+
+interface LinksProps {
+
+    openLinkModal: () => void
+
+}
+
+export function Links({ openLinkModal }:LinksProps) {
+
+    const { tripId } = useParams()
+    const [links, setLinks] = useState<Links[]>([])
+
+    useEffect(() => {
+        api.get(`/trips/${tripId}/links`)
+        .then(response => setLinks(response.data.links))
+
+    }, [tripId])
 
     return(
         <div className="space-y-6">
@@ -12,13 +38,15 @@ export function Links() {
 
             <div className="space-y-5">
 
-                <LinksCard />
-
-                <LinksCard />
+                {
+                    links.map(link => {
+                        return <LinksCard key={link.id} title={link.title} url={link.url} />
+                    })
+                }
 
             </div>
 
-            <Button colorVariant="secondary" sizeVariant="full">
+            <Button onClick={openLinkModal} colorVariant="secondary" sizeVariant="full">
                 <Plus className="size-5" />
                 Cadastrar Novo Link
             </Button>

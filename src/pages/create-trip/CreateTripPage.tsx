@@ -179,6 +179,8 @@ export function CreateTripPage() {
         createTrip={createTrip}
         setTripCreator={setTripCreator}
         setCreatorEmail={setcreatorEmail}
+        destination={destination}
+        tripStartEndDate={tripStartEndDate}
         />
         }
 

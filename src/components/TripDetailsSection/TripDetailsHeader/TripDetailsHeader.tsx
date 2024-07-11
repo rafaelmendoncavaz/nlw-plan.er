@@ -15,10 +15,17 @@ interface TripDetails {
 
 }
 
-export function TripDetailsHeader() {
+interface TripDetailsHeaderProps {
+
+    openChangeDestinationDateModal: () => void,
+
+}
+
+export function TripDetailsHeader({ openChangeDestinationDateModal }:TripDetailsHeaderProps) {
 
     const { tripId } = useParams()
     const [trip, setTrip] = useState<TripDetails | undefined>()
+    
 
     useEffect(() => {
         api.get(`/trips/${tripId}`)
@@ -51,7 +58,7 @@ export function TripDetailsHeader() {
 
                 <div className="w-px h-6 bg-zinc-800" />
 
-                <Button colorVariant="secondary">
+                <Button onClick={openChangeDestinationDateModal} colorVariant="secondary">
                     Alterar Local/Data
                     <Settings2 className="size-5" />
                 </Button>

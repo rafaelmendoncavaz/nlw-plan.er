@@ -3,7 +3,7 @@ import { Input } from "../../../Global/Input"
 
 interface LocationProp {
 
-    isGuestsInputOpen: boolean,
+    isGuestsInputOpen: boolean | undefined,
     setDestination: (destination: string) => void,
 
 }

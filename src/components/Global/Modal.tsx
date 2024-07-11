@@ -31,7 +31,7 @@ export function Modal({ children, title, description, form, size, closeModal }: 
 
     return(
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
-            <div className={`${size} rounded-xl py-5 px-6 shadow-shape bg-zinc-900 space-y-5`}>
+            <div className={`${modalVariants({ size })} rounded-xl py-5 px-6 shadow-shape bg-zinc-900 space-y-5`}>
 
                 <div className="space-y-2">
 

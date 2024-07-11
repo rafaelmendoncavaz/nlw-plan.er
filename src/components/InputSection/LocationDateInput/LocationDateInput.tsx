@@ -15,7 +15,7 @@ interface LocationDateInputProps {
     setDestination: (destination: string) => void,
     setTripStartEndDate: (tripStartEndDate: DateRange | undefined ) => void,
     tripStartEndDate: DateRange | undefined,
-    isGuestsInputOpen: boolean
+    isGuestsInputOpen?: boolean | undefined
 
 }
 

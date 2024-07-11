@@ -2,7 +2,7 @@ import { Calendar } from "lucide-react"
 
 interface CalendarProp {
 
-    isGuestsInputOpen: boolean,
+    isGuestsInputOpen: boolean | undefined,
     openDatePicker: () => void,
     displayedDate: string | null
 
